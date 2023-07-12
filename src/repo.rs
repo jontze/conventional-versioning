@@ -30,11 +30,14 @@ pub(crate) fn latest_tag(
                 .context("Unable to parse latest tag as a node semver version")?,
         ),
         SemVerVariantArg::Cargo => VersionVariant::Cargo(
-            semver::Version::parse(&latest_tag_name)
-                .context("Unable to parse latest tag as a cargo semver version")?,
+            semver::Version::parse(
+                latest_tag_name
+                    .strip_prefix('v')
+                    .unwrap_or(&latest_tag_name),
+            )
+            .context("Unable to parse latest tag as a cargo semver version")?,
         ),
     };
-
     Ok((latest_tag, latest_tag_object))
 }
 
