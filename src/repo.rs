@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use anyhow::Context;
 use git2::{DescribeFormatOptions, Object, Repository};
 
-use crate::{args::SemVerVariantArg, variant::VersionVariant};
+use crate::{args::SemVerKindArg, variant::VersionVariant};
 
 pub(crate) fn open(path: Option<PathBuf>) -> anyhow::Result<Repository> {
     let repo_path = path.unwrap_or(std::path::Path::new(".").to_path_buf());
@@ -14,7 +14,7 @@ pub(crate) fn open(path: Option<PathBuf>) -> anyhow::Result<Repository> {
 
 pub(crate) fn latest_tag(
     repo: &Repository,
-    version_variant: SemVerVariantArg,
+    version_variant: SemVerKindArg,
 ) -> anyhow::Result<(VersionVariant, Object)> {
     let latest_tag_name = repo
         .describe(git2::DescribeOptions::new().describe_tags())
@@ -25,11 +25,11 @@ pub(crate) fn latest_tag(
         .revparse_single(&latest_tag_name)
         .context("Unable to find latest tag by name {latest_tag_name}")?;
     let latest_tag = match version_variant {
-        SemVerVariantArg::Node => VersionVariant::Node(
+        SemVerKindArg::Node => VersionVariant::Node(
             node_semver::Version::parse(&latest_tag_name)
                 .context("Unable to parse latest tag as a node semver version")?,
         ),
-        SemVerVariantArg::Cargo => VersionVariant::Cargo(
+        SemVerKindArg::Cargo => VersionVariant::Cargo(
             semver::Version::parse(
                 latest_tag_name
                     .strip_prefix('v')
