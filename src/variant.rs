@@ -6,57 +6,68 @@ pub(crate) enum VersionVariant {
     Cargo(semver::Version),
 }
 
-impl VersionVariant {
-    pub(crate) fn major(&self) -> u64 {
+pub(crate) trait AbstractVersion {
+    fn major(&self) -> u64;
+    fn minor(&self) -> u64;
+    fn patch(&self) -> u64;
+    fn increment_major(&mut self);
+    fn increment_minor(&mut self);
+    fn increment_patch(&mut self);
+    fn reset_minor(&mut self);
+    fn reset_patch(&mut self);
+}
+
+impl AbstractVersion for VersionVariant {
+    fn major(&self) -> u64 {
         match self {
             VersionVariant::Node(node_version) => node_version.major,
             VersionVariant::Cargo(cargo_version) => cargo_version.major,
         }
     }
 
-    pub(crate) fn minor(&self) -> u64 {
+    fn minor(&self) -> u64 {
         match self {
             VersionVariant::Node(node_version) => node_version.minor,
             VersionVariant::Cargo(cargo_version) => cargo_version.minor,
         }
     }
 
-    pub(crate) fn patch(&self) -> u64 {
+    fn patch(&self) -> u64 {
         match self {
             VersionVariant::Node(node_version) => node_version.patch,
             VersionVariant::Cargo(cargo_version) => cargo_version.patch,
         }
     }
 
-    pub(crate) fn increment_major(&mut self) {
+    fn increment_major(&mut self) {
         match self {
             VersionVariant::Node(node_version) => node_version.major += 1,
             VersionVariant::Cargo(cargo_version) => cargo_version.major += 1,
         }
     }
 
-    pub(crate) fn increment_minor(&mut self) {
+    fn increment_minor(&mut self) {
         match self {
             VersionVariant::Node(node_version) => node_version.minor += 1,
             VersionVariant::Cargo(cargo_version) => cargo_version.minor += 1,
         }
     }
 
-    pub(crate) fn increment_patch(&mut self) {
+    fn increment_patch(&mut self) {
         match self {
             VersionVariant::Node(node_version) => node_version.patch += 1,
             VersionVariant::Cargo(cargo_version) => cargo_version.patch += 1,
         }
     }
 
-    pub(crate) fn reset_minor(&mut self) {
+    fn reset_minor(&mut self) {
         match self {
             VersionVariant::Node(node_version) => node_version.minor = 0,
             VersionVariant::Cargo(cargo_version) => cargo_version.minor = 0,
         }
     }
 
-    pub(crate) fn reset_patch(&mut self) {
+    fn reset_patch(&mut self) {
         match self {
             VersionVariant::Node(node_version) => node_version.patch = 0,
             VersionVariant::Cargo(cargo_version) => cargo_version.patch = 0,
