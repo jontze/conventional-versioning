@@ -1,11 +1,12 @@
 use anyhow::Context;
 use git2::Commit;
-use node_semver::Version;
 
 #[cfg(test)]
 use mockall::predicate::*;
 #[cfg(test)]
 use mockall::*;
+
+use crate::variant::VersionVariant;
 
 #[cfg_attr(test, automock)]
 pub(crate) trait CommitExt {
@@ -141,20 +142,20 @@ pub(crate) fn analyze(commits: Vec<Commit<'_>>) -> anyhow::Result<AnalyzeResult<
     Ok(result)
 }
 
-pub(crate) fn suggest_next_version<'repo>(
-    current_version: &'repo Version,
+pub(crate) fn suggest_next_version(
+    current_version: &VersionVariant,
     conventional_analyze: &dyn CommitExt,
-) -> Version {
+) -> VersionVariant {
     let mut next_version = current_version.clone();
     if conventional_analyze.is_breaking() {
-        next_version.major += 1;
-        next_version.minor = 0;
-        next_version.patch = 0;
+        next_version.increment_major();
+        next_version.reset_minor();
+        next_version.reset_patch();
     } else if conventional_analyze.is_minor() {
-        next_version.minor += 1;
-        next_version.patch = 0;
+        next_version.increment_minor();
+        next_version.reset_patch();
     } else if conventional_analyze.is_patch() {
-        next_version.patch += 1;
+        next_version.increment_patch();
     }
     next_version
 }
@@ -162,6 +163,8 @@ pub(crate) fn suggest_next_version<'repo>(
 #[cfg(test)]
 mod test {
     use super::*;
+
+    use node_semver::Version;
 
     #[test]
     fn test_feat_commit_detection() {
@@ -430,37 +433,37 @@ mod test {
 
     #[test]
     fn test_suggest_next_major_version() {
-        let current_version = Version::parse("1.0.0").unwrap();
+        let current_version = VersionVariant::Node(Version::parse("1.0.0").unwrap());
         let mut mock_commit_ext = MockCommitExt::new();
         mock_commit_ext.expect_is_breaking().returning(|| true);
         assert_eq!(
             suggest_next_version(&current_version, &mock_commit_ext),
-            Version::parse("2.0.0").unwrap()
+            VersionVariant::Node(Version::parse("2.0.0").unwrap())
         );
     }
 
     #[test]
     fn test_suggest_next_minor_version() {
-        let current_version = Version::parse("1.0.0").unwrap();
+        let current_version = VersionVariant::Node(Version::parse("1.0.0").unwrap());
         let mut mock_commit_ext = MockCommitExt::new();
         mock_commit_ext.expect_is_breaking().returning(|| false);
         mock_commit_ext.expect_is_minor().returning(|| true);
         assert_eq!(
             suggest_next_version(&current_version, &mock_commit_ext),
-            Version::parse("1.1.0").unwrap()
+            VersionVariant::Node(Version::parse("1.1.0").unwrap())
         );
     }
 
     #[test]
     fn test_suggest_next_patch_version() {
-        let current_version = Version::parse("1.0.0").unwrap();
+        let current_version = VersionVariant::Node(Version::parse("1.0.0").unwrap());
         let mut mock_commit_ext = MockCommitExt::new();
         mock_commit_ext.expect_is_breaking().returning(|| false);
         mock_commit_ext.expect_is_minor().returning(|| false);
         mock_commit_ext.expect_is_patch().returning(|| true);
         assert_eq!(
             suggest_next_version(&current_version, &mock_commit_ext),
-            Version::parse("1.0.1").unwrap()
+            VersionVariant::Node(Version::parse("1.0.1").unwrap())
         );
     }
 }

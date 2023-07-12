@@ -1,17 +1,21 @@
+use std::path::PathBuf;
+
 use anyhow::Context;
 use git2::{DescribeFormatOptions, Object, Repository};
 
-pub(crate) fn open(args: &crate::Args) -> anyhow::Result<Repository> {
-    let repo_path = args
-        .path
-        .clone()
-        .unwrap_or(std::path::Path::new(".").to_path_buf());
+use crate::{args::SemVerVariantArg, variant::VersionVariant};
+
+pub(crate) fn open(path: Option<PathBuf>) -> anyhow::Result<Repository> {
+    let repo_path = path.unwrap_or(std::path::Path::new(".").to_path_buf());
     let repo = Repository::open(repo_path)
         .context("Unable to open the repository at the given location")?;
     Ok(repo)
 }
 
-pub(crate) fn latest_tag(repo: &Repository) -> anyhow::Result<(node_semver::Version, Object)> {
+pub(crate) fn latest_tag(
+    repo: &Repository,
+    version_variant: SemVerVariantArg,
+) -> anyhow::Result<(VersionVariant, Object)> {
     let latest_tag_name = repo
         .describe(git2::DescribeOptions::new().describe_tags())
         .context("There are no tags in the repository")?
@@ -20,8 +24,17 @@ pub(crate) fn latest_tag(repo: &Repository) -> anyhow::Result<(node_semver::Vers
     let latest_tag_object = repo
         .revparse_single(&latest_tag_name)
         .context("Unable to find latest tag by name {latest_tag_name}")?;
-    let latest_tag = node_semver::Version::parse(&latest_tag_name)
-        .context("Unable to parse latest tag as a semver version")?;
+    let latest_tag = match version_variant {
+        SemVerVariantArg::Node => VersionVariant::Node(
+            node_semver::Version::parse(&latest_tag_name)
+                .context("Unable to parse latest tag as a node semver version")?,
+        ),
+        SemVerVariantArg::Cargo => VersionVariant::Cargo(
+            semver::Version::parse(&latest_tag_name)
+                .context("Unable to parse latest tag as a cargo semver version")?,
+        ),
+    };
+
     Ok((latest_tag, latest_tag_object))
 }
 

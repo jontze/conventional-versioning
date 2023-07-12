@@ -10,6 +10,7 @@ anyhow = "1.0.71"
 clap = { version = "4.3.11", features = ["derive"] }
 git2 = "0.17.2"
 node-semver = "2.1.0"
+semver = "1.0.17"
 
 [dev-dependencies]
 mockall = "0.11.4"
