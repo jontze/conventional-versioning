@@ -23,6 +23,8 @@ fn main() -> anyhow::Result<()> {
     println!("{tag_name}: {:?}", tag_obj.id());
 
     let commits = repo::commits_since_tag(&repo, &tag_obj);
-    let _result = conventional::analyze(commits?)?;
+    let result = conventional::analyze(commits?)?;
+    let next_version = conventional::suggest_next_version(&tag_name, &result);
+    println!("Next version: {}", next_version);
     Ok(())
 }
