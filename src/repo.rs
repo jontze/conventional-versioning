@@ -52,10 +52,16 @@ pub(crate) fn commits_since_tag<'a>(
     revwalk
         .set_sorting(git2::Sort::TOPOLOGICAL)
         .context("Unable to set sorting")?;
+
+    let tag_commit_id = tag
+        .peel_to_commit()
+        .context("Tag can't be peeled to a commit")?
+        .id();
+
     let mut commits = Vec::new();
     for commit_id in revwalk {
         let commit_id = commit_id.unwrap();
-        if commit_id == tag.id() {
+        if commit_id == tag_commit_id {
             break;
         }
         let commit = repo
