@@ -13,11 +13,11 @@ fn main() -> anyhow::Result<()> {
 
     let repo = repo::open(args.path)?;
 
-    let (tag_version, tag_obj) = repo::latest_tag(&repo, semver_variant)?;
+    let (mut tag_version, tag_obj) = repo::latest_tag(&repo, semver_variant)?;
 
     let commits = repo::commits_since_tag(&repo, &tag_obj);
     let result = conventional::analyze(commits?)?;
-    let next_version = conventional::suggest_next_version(&tag_version, &result);
+    let next_version = conventional::suggest_next_version(&mut tag_version, &result);
     println!("Next version: {}", next_version);
     Ok(())
 }
