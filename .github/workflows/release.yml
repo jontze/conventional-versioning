@@ -61,6 +61,9 @@ jobs:
       - name: Install dependencies for musl build
         if: matrix.target == 'x86_64-unknown-linux-musl'
         run: sudo apt install -y musl-tools
+      - name: Install depdendencies for linux arm64 build
+        if: matrix.target == 'aarch64-unknown-linux-gnu'
+        run: sudo apt install -y gcc-aarch64-linux-gnu
       - name: Build Binary
         run: cargo build --release --target ${{ matrix.target }}
       - name: Archive Binary
@@ -80,7 +83,7 @@ jobs:
         with:
           if-no-files-found: error
           name: conventional-versioning-${{ steps.tag.outputs.name }}-${{ matrix.target }}
-          path: conventional-versioning-${{ steps.tag.outputs.name }}-${{ matrix.target }}
+          path: conventional-versioning-${{ steps.tag.outputs.name }}-${{ matrix.target }}.*
 
   release:
     needs: build
