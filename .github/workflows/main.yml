@@ -15,7 +15,7 @@ on:
 jobs:
   test:
     name: Test
-    uses: jontze/.workflows/.github/workflows/test.yml@main
+    uses: jontze/.workflows/.github/workflows/test.yaml@main
     with:
       build: true
       unit-test: true
