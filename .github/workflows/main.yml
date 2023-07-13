@@ -18,4 +18,4 @@ jobs:
     uses: jontze/.workflows/.github/workflows/rust_test.yaml@main
     with:
       build: true
-      unit-test: true
+      unit-tests: true
