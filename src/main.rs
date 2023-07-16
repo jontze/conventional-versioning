@@ -22,6 +22,13 @@ fn main() -> anyhow::Result<()> {
     let result = conventional::analyze(commits?)?;
     let next_version = conventional::suggest_next_version(&mut tag_version, &result);
 
-    output::print(cli_output_format, next_version, &previous_version)?;
+    println!(
+        "{}",
+        output::stringify(
+            cli_output_format,
+            next_version,
+            previous_version.to_string(),
+        )?
+    );
     Ok(())
 }
