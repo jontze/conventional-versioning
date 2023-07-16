@@ -1,4 +1,4 @@
-use anyhow::Context;
+use miette::miette;
 #[cfg(test)]
 use serde::Deserialize;
 use serde::Serialize;
@@ -10,7 +10,7 @@ pub(crate) fn stringify(
     next_version: impl Into<String>,
     previous_version: impl Into<String>,
     analyze_result: AnalyzeResult,
-) -> anyhow::Result<String> {
+) -> miette::Result<String> {
     let amount_breaking = analyze_result.breaking.len();
     let amount_features = analyze_result.features.len();
     let amount_fixes = analyze_result.fixes.len();
@@ -18,9 +18,8 @@ pub(crate) fn stringify(
     let commits: CommitOutput = analyze_result.into();
 
     let previous_version = previous_version.into();
-    let output = match format {
-        OutputFormat::Human => {
-            format!(
+    match format {
+        OutputFormat::Human => Ok(format!(
                 "Previous version: {}\nNext version: {}\nBreaking: {}\nFeatures: {}\nFixes: {}\nUnclassified: {}",
                 previous_version,
                 next_version.into(),
@@ -28,37 +27,36 @@ pub(crate) fn stringify(
                 amount_features,
                 amount_fixes,
                 amount_unclassified,
-            )
-        }
-        OutputFormat::Plain => next_version.into().to_string(),
-        OutputFormat::Json => (serde_json::to_string_pretty(&Output {
+        )),
+        OutputFormat::Plain => Ok(next_version.into().to_string()),
+        OutputFormat::Json => serde_json::to_string_pretty(&Output {
             previous_version: previous_version.to_string(),
             next_version: next_version.into(),
-
             commits,
         })
         .map_err(|err| {
-            eprintln!("Failed to serialize output: {}", err);
-            err
+            miette!("Failed to serialize output to json: '{}'", err)
         })
-        .context("Failed to serialize output")?)
-        .to_string(),
-        OutputFormat::Yaml | OutputFormat::Yml => (serde_yaml::to_string(&Output {
+        .map(|s| s.to_string()),
+        OutputFormat::Yaml | OutputFormat::Yml => serde_yaml::to_string(&Output {
             previous_version: previous_version.to_string(),
             next_version: next_version.into(),
             commits,
         })
-        .context("Failed to serialize output")?)
-        .to_string(),
-        OutputFormat::Toml => (toml::to_string(&Output {
+        .map_err(|err| {
+            miette!("Failed to serialize output to yaml: '{}'", err)
+        })
+        .map(|s| s.to_string()),
+        OutputFormat::Toml => toml::to_string(&Output {
             previous_version: previous_version.to_string(),
             next_version: next_version.into(),
             commits,
         })
-        .context("Failed to serialize output")?)
-        .to_string(),
-    };
-    Ok(output)
+        .map_err(|err| {
+            miette!("Failed to serialize output to toml: '{}'", err)
+        })
+        .map(|s| s.to_string()),
+    }
 }
 
 #[derive(Debug, Serialize)]

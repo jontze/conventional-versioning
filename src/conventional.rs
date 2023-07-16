@@ -1,4 +1,4 @@
-use anyhow::Context;
+use miette::miette;
 #[cfg(test)]
 use serde::Deserialize;
 use serde::Serialize;
@@ -61,13 +61,13 @@ impl CommitExt for CommitType {
 }
 
 impl TryFrom<&str> for CommitType {
-    type Error = anyhow::Error;
+    type Error = miette::Error;
 
     fn try_from(commit_string: &str) -> Result<Self, Self::Error> {
         let commit_prefix = commit_string
             .split(':')
             .next()
-            .context("Unable to split commit message by ':'")?;
+            .ok_or(miette!("Unable to split commit message by ':'"))?;
         if commit_prefix.contains('!') || commit_string.contains("BREAKING CHANGE:") {
             return Ok(CommitType::Breaking);
         }
@@ -75,7 +75,7 @@ impl TryFrom<&str> for CommitType {
             commit_prefix
                 .split('(')
                 .next()
-                .context("Unable to split commit message by scope")?
+                .ok_or(miette!("Unable to split commit message by scope"))?
         } else {
             commit_prefix
         };
@@ -117,7 +117,7 @@ impl CommitExt for AnalyzeResult {
     }
 }
 
-pub(crate) fn analyze(commits: Vec<Commit>) -> anyhow::Result<AnalyzeResult> {
+pub(crate) fn analyze(commits: Vec<Commit>) -> miette::Result<AnalyzeResult> {
     let mut result = AnalyzeResult {
         breaking: Vec::new(),
         features: Vec::new(),

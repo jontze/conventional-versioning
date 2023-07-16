@@ -1,5 +1,5 @@
-use anyhow::Context;
 use git2::{DescribeFormatOptions, Object, Repository};
+use miette::{miette, Context};
 #[cfg(test)]
 use serde::Deserialize;
 use serde::Serialize;
@@ -15,38 +15,38 @@ pub(crate) struct Commit {
 }
 
 impl TryFrom<git2::Commit<'_>> for Commit {
-    type Error = anyhow::Error;
+    type Error = miette::Error;
 
     fn try_from(commit: git2::Commit) -> Result<Self, Self::Error> {
         Ok(Self {
             id: commit.id().to_string(),
             message: commit
                 .message()
-                .context("Commit message is not valid UTF-8")?
+                .ok_or_else(|| miette!("Commit message is not valid UTF-8: '{}'", commit.id()))?
                 .to_string(),
         })
     }
 }
 
-pub(crate) fn open(path: Option<PathBuf>) -> anyhow::Result<Repository> {
+pub(crate) fn open(path: Option<PathBuf>) -> miette::Result<Repository> {
     let repo_path = path.unwrap_or(std::path::Path::new(".").to_path_buf());
     let repo = Repository::open(repo_path)
-        .context("Unable to open the repository at the given location")?;
+        .map_err(|_| miette!("No repository found at the target location"))?;
     Ok(repo)
 }
 
 pub(crate) fn latest_tag(
     repo: &Repository,
     version_variant: SemVerKindArg,
-) -> anyhow::Result<(VersionVariant, Object)> {
+) -> miette::Result<(VersionVariant, Object)> {
     let latest_tag_name = repo
         .describe(git2::DescribeOptions::new().describe_tags())
-        .context("There are no tags in the repository")?
+        .map_err(|_| miette!("No tags in the repository"))?
         .format(Some(DescribeFormatOptions::default().abbreviated_size(0)))
-        .context("Unable to format tag name")?;
+        .map_err(|_| miette!("Unable to format tag name"))?;
     let latest_tag_object = repo
         .revparse_single(&latest_tag_name)
-        .context("Unable to find latest tag by name {latest_tag_name}")?;
+        .map_err(|_| miette!("Unable to find latest tag object '{latest_tag_name}'"))?;
     let latest_tag = match version_variant {
         SemVerKindArg::Node => VersionVariant::Node(
             node_semver::Version::parse(&latest_tag_name)
@@ -58,7 +58,9 @@ pub(crate) fn latest_tag(
                     .strip_prefix('v')
                     .unwrap_or(&latest_tag_name),
             )
-            .context("Unable to parse latest tag as a cargo semver version")?,
+            .map_err(|_| {
+                miette!("Unable to parse tag '{latest_tag_name}' as cargo SemVer version. Is this a valid format?")
+            })?,
         ),
     };
     Ok((latest_tag, latest_tag_object))
@@ -67,18 +69,20 @@ pub(crate) fn latest_tag(
 pub(crate) fn commits_since_tag<'a>(
     repo: &'a Repository,
     tag: &'a Object,
-) -> anyhow::Result<Vec<Commit>> {
-    let mut revwalk = repo.revwalk().context("Unbale to create revwalk")?;
+) -> miette::Result<Vec<Commit>> {
+    let mut revwalk = repo
+        .revwalk()
+        .map_err(|_| miette!("Unable to start revwalk."))?;
     revwalk
         .push_head()
-        .context("Unable to push HEAD to revwalk")?;
+        .map_err(|_| miette!("Unable to push HEAD to revwalk"))?;
     revwalk
         .set_sorting(git2::Sort::TOPOLOGICAL)
-        .context("Unable to set sorting")?;
+        .map_err(|_| miette!("Unable to define revwalk sorting"))?;
 
     let tag_commit_id = tag
         .peel_to_commit()
-        .context("Tag can't be peeled to a commit")?
+        .map_err(|_| miette!("Tag can't be peeled to a commit"))?
         .id();
 
     let mut commits = Vec::new();
@@ -89,7 +93,7 @@ pub(crate) fn commits_since_tag<'a>(
         }
         let commit = repo
             .find_commit(commit_id)
-            .context("Unable to find commit of revwalk")?;
+            .map_err(|_| miette!("Unable to find commit of revwalk"))?;
         commits.push(commit.try_into()?);
     }
     Ok(commits)

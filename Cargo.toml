@@ -6,9 +6,9 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-anyhow = "1.0.71"
 clap = { version = "4.3.11", features = ["derive"] }
 git2 = { version = "0.17.2",  default-features = false}
+miette = { version = "5.10.0", features = ["fancy"] }
 node-semver = "2.1.0"
 semver = "1.0.17"
 serde = { version = "1.0.171", features = ["derive"] }
