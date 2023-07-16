@@ -1,20 +1,9 @@
 use anyhow::Context;
-use clap::ValueEnum;
 #[cfg(test)]
 use serde::Deserialize;
 use serde::Serialize;
 
-use crate::{conventional::AnalyzeResult, repo::Commit};
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, ValueEnum)]
-pub(crate) enum OutputFormat {
-    Human,
-    Plain,
-    Json,
-    Yaml,
-    Yml,
-    Toml,
-}
+use crate::{args::OutputFormat, conventional::AnalyzeResult, repo::Commit};
 
 pub(crate) fn stringify(
     format: OutputFormat,

@@ -11,7 +11,7 @@ use args::{Args, SemVerKindArg};
 fn main() -> anyhow::Result<()> {
     let args = Args::parse();
     let semver_kind = args.kind.unwrap_or(SemVerKindArg::Node);
-    let cli_output_format = args.output.unwrap_or(output::OutputFormat::Human);
+    let cli_output_format = args.out.unwrap_or(args::OutputFormat::Human);
 
     let repo = repo::open(args.path)?;
 
