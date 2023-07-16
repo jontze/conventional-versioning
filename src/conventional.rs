@@ -1,5 +1,7 @@
 use anyhow::Context;
-use git2::Commit;
+#[cfg(test)]
+use serde::Deserialize;
+use serde::Serialize;
 use std::fmt::Display;
 
 #[cfg(test)]
@@ -7,6 +9,7 @@ use mockall::predicate::*;
 #[cfg(test)]
 use mockall::*;
 
+use crate::repo::Commit;
 use crate::variant::AbstractVersion;
 
 #[cfg_attr(test, automock)]
@@ -16,7 +19,8 @@ pub(crate) trait CommitExt {
     fn is_patch(&self) -> bool;
 }
 
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone)]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Serialize)]
+#[cfg_attr(test, derive(Deserialize))]
 pub(crate) enum CommitType {
     /// Commit that has a ! after the type or a BREAKING CHANGE: in its body`
     Breaking,
@@ -92,14 +96,14 @@ impl TryFrom<&str> for CommitType {
 }
 
 #[derive(Debug, Clone)]
-pub(crate) struct AnalyzeResult<'repo> {
-    pub(crate) breaking: Vec<Commit<'repo>>,
-    pub(crate) features: Vec<Commit<'repo>>,
-    pub(crate) fixes: Vec<Commit<'repo>>,
-    pub(crate) others: Vec<Commit<'repo>>,
+pub(crate) struct AnalyzeResult {
+    pub(crate) breaking: Vec<Commit>,
+    pub(crate) features: Vec<Commit>,
+    pub(crate) fixes: Vec<Commit>,
+    pub(crate) others: Vec<Commit>,
 }
 
-impl<'repo> CommitExt for AnalyzeResult<'repo> {
+impl CommitExt for AnalyzeResult {
     fn is_breaking(&self) -> bool {
         !self.breaking.is_empty()
     }
@@ -113,7 +117,7 @@ impl<'repo> CommitExt for AnalyzeResult<'repo> {
     }
 }
 
-pub(crate) fn analyze(commits: Vec<Commit<'_>>) -> anyhow::Result<AnalyzeResult<'_>> {
+pub(crate) fn analyze(commits: Vec<Commit>) -> anyhow::Result<AnalyzeResult> {
     let mut result = AnalyzeResult {
         breaking: Vec::new(),
         features: Vec::new(),
@@ -121,12 +125,7 @@ pub(crate) fn analyze(commits: Vec<Commit<'_>>) -> anyhow::Result<AnalyzeResult<
         others: Vec::new(),
     };
     for commit in commits {
-        let full_commit_message = commit.message().context(format!(
-            "Unable to read commit message of commit: '{0}'",
-            commit.id()
-        ))?;
-
-        match CommitType::try_from(full_commit_message)? {
+        match CommitType::try_from(commit.message.as_str())? {
             CommitType::Breaking => {
                 result.breaking.push(commit);
             }
