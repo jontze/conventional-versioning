@@ -28,6 +28,7 @@ fn main() -> anyhow::Result<()> {
             cli_output_format,
             next_version,
             previous_version.to_string(),
+            result
         )?
     );
     Ok(())
