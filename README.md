@@ -6,7 +6,7 @@ Conventional Versioning is a tool for automatically generating version numbers b
 
 ## Installation
 
-There are various ways to install Conventional Versioning. The easiest way is to install it using [Cargo](https://doc.rust-lang.org/cargo/getting-started/installation.html) derictly from the git repository:
+There are various ways to install Conventional Versioning. The easiest way is to install it using [Cargo](https://doc.rust-lang.org/cargo/getting-started/installation.html) directly from the git repository:
 
 ```sh
 cargo install --git https://github.com/jontze/conventional-versioning
