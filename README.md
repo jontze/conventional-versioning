@@ -28,7 +28,7 @@ conventional-versioning
 
 This will determine the next version number based on the **commit messages** in your repository and the latest **git tag**, and output it to stdout. You can decide on various options to customize the output.
 
-_For more information run call the `--help` argument._
+_Call the `--help` argument for more information._
 
 ## License
 
