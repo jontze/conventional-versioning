@@ -12,7 +12,7 @@ miette = { version = "5.10.0", features = ["fancy"] }
 node-semver = "2.1.0"
 semver = "1.0.17"
 serde = { version = "1.0.171", features = ["derive"] }
-serde_json = "1.0.102"
+serde_json = "1.0.103"
 serde_yaml = "0.9.22"
 toml = "0.7.6"
 
