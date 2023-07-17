@@ -69,13 +69,13 @@ jobs:
         working-directory: target/${{ matrix.target }}/release/
         run: |
           strip conventional-versioning
-          tar czvf ../../../conventional-versioning-${{ steps.tag.outputs.name }}-${{ matrix.target }}.tar.gz --transform "s|.*/||" conventional-versioning
+          tar czvf ../../../conventional-versioning-${{ steps.tag.outputs.name }}-${{ matrix.target }}.tar.gz conventional-versioning
       - name: Archive Binary (windows)
         if: matrix.os == 'windows-latest'
         working-directory: target/${{ matrix.target }}/release/
         run: |
           strip conventional-versioning.exe
-          7z a ../../../conventional-versioning-${{ steps.tag.outputs.name }}-${{ matrix.target }}.zip conventional-versioning.exe -mx=9
+          7z a ../../../conventional-versioning-${{ steps.tag.outputs.name }}-${{ matrix.target }}.zip conventional-versioning.exe
       - name: Upload Archive as Artifact
         uses: actions/upload-artifact@v3
         with:
@@ -92,6 +92,10 @@ jobs:
         uses: actions/checkout@v3
       - name: Get Artifacts
         uses: actions/download-artifact@v3
+      - name: Debug
+        run: |
+          ls -la
+          ls -la conventional-versioning-*
       # - name: Create Release
       #   uses: softprops/action-gh-release@v1
       #   with:
