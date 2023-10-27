@@ -13,7 +13,7 @@ node-semver = "2.1.0"
 semver = "1.0.20"
 serde = { version = "1.0.190", features = ["derive"] }
 serde_json = "1.0.107"
-serde_yaml = "0.9.25"
+serde_yaml = "0.9.27"
 toml = "0.8.4"
 
 [dev-dependencies]
