@@ -25,5 +25,7 @@ jobs:
     needs: 
       - test
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    permissions:
+      contents: write      
     uses: jontze/.workflows/.github/workflows/rust_release.yaml@main
     secrets: inherit
