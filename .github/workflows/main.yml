@@ -19,3 +19,8 @@ jobs:
     with:
       build: true
       unit-tests: true
+
+  next:
+    name: Release
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    uses: jontze/.workflows/.github/workflows/rust_release.yaml@main
