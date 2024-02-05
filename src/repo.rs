@@ -1,5 +1,5 @@
 use git2::{DescribeFormatOptions, Object, Repository};
-use miette::{miette, Context};
+use miette::{miette, Context, IntoDiagnostic};
 #[cfg(test)]
 use serde::Deserialize;
 use serde::Serialize;
@@ -49,8 +49,8 @@ pub(crate) fn latest_tag(
         .map_err(|_| miette!("Unable to find latest tag object '{latest_tag_name}'"))?;
     let latest_tag = match version_variant {
         SemVerKindArg::Node => VersionVariant::Node(
-            node_semver::Version::parse(&latest_tag_name)
-                .context("Unable to parse latest tag as a node semver version")?,
+            node_semver::Version::parse(&latest_tag_name).into_diagnostic()
+                .wrap_err("Unable to parse latest tag as a node semver version")?,
         ),
         SemVerKindArg::Cargo => VersionVariant::Cargo(
             semver::Version::parse(
