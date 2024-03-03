@@ -3,7 +3,7 @@ use miette::miette;
 use serde::Deserialize;
 use serde::Serialize;
 
-use crate::{args::OutputFormat, conventional::AnalyzeResult, repo::Commit};
+use crate::{configuration::OutputFormat, conventional::AnalyzeResult, repo::Commit};
 
 pub(crate) fn stringify(
     format: OutputFormat,
