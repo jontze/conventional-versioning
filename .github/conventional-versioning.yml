@@ -1,0 +1,15 @@
+---
+# Configuration for conventional-versioning
+kind: Node # Node | Cargo
+output: Plain # Human | Plain | Json | Yaml | Yml | Toml
+prefixes:
+  patch:
+    - "fix" # e.g. fix: ... | fix(scope): ...    
+    - "chore"    
+  minor:
+    - "feat"    
+  major: 
+    # Commits with a "!" or "BREAKING CHANGE:"
+    # will always be considered 
+    # as a major change    
+    
