@@ -1,16 +1,14 @@
 use miette::miette;
 #[cfg(test)]
+use mockall::predicate::*;
+#[cfg(test)]
+use mockall::*;
+#[cfg(test)]
 use serde::Deserialize;
 use serde::Serialize;
 use std::fmt::Display;
 
-#[cfg(test)]
-use mockall::predicate::*;
-#[cfg(test)]
-use mockall::*;
-
-use crate::repo::Commit;
-use crate::variant::AbstractVersion;
+use crate::{configuration::Prefixes, repo::Commit, variant::AbstractVersion};
 
 #[cfg_attr(test, automock)]
 pub(crate) trait CommitExt {
@@ -43,7 +41,11 @@ pub(crate) enum CommitType {
     /// Commit that starts with `revert:`
     Revert,
     /// Any commit that doesn't fit in the above categories
-    Other(String),
+    Other {
+        prefix: String,
+        prefix_with_scope: String,
+        message: String,
+    },
 }
 
 impl CommitExt for CommitType {
@@ -90,7 +92,29 @@ impl TryFrom<&str> for CommitType {
             "refactor" => Ok(Self::Refactor),
             "style" => Ok(Self::Style),
             "revert" => Ok(Self::Revert),
-            _ => Ok(Self::Other(commit_string.to_string())),
+            _ => Ok(Self::Other {
+                prefix: commit_type_string.to_string(),
+                prefix_with_scope: commit_prefix.to_string(),
+                message: commit_string.to_string(),
+            }),
+        }
+    }
+}
+
+impl ToString for CommitType {
+    fn to_string(&self) -> String {
+        match self {
+            CommitType::Breaking => "breaking".to_string(),
+            CommitType::Feature => "feat".to_string(),
+            CommitType::Fix => "fix".to_string(),
+            CommitType::Build => "build".to_string(),
+            CommitType::Ci => "ci".to_string(),
+            CommitType::Docs => "docs".to_string(),
+            CommitType::Perf => "perf".to_string(),
+            CommitType::Refactor => "refactor".to_string(),
+            CommitType::Style => "style".to_string(),
+            CommitType::Revert => "revert".to_string(),
+            CommitType::Other { prefix, .. } => prefix.to_string(),
         }
     }
 }
@@ -117,26 +141,49 @@ impl CommitExt for AnalyzeResult {
     }
 }
 
-pub(crate) fn analyze(commits: Vec<Commit>) -> miette::Result<AnalyzeResult> {
+pub(crate) fn analyze(commits: Vec<Commit>, prefixes: &Prefixes) -> miette::Result<AnalyzeResult> {
     let mut result = AnalyzeResult {
         breaking: Vec::new(),
         features: Vec::new(),
         fixes: Vec::new(),
         others: Vec::new(),
     };
-    for commit in commits {
-        match CommitType::try_from(commit.message.as_str())? {
-            CommitType::Breaking => {
-                result.breaking.push(commit);
+    // Use default if no custom prefix config provided
+    if prefixes.is_empty() {
+        for commit in commits {
+            match CommitType::try_from(commit.message.as_str())? {
+                CommitType::Breaking => {
+                    result.breaking.push(commit);
+                }
+                CommitType::Feature => {
+                    result.features.push(commit);
+                }
+                CommitType::Fix => {
+                    result.fixes.push(commit);
+                }
+                _ => {
+                    result.others.push(commit);
+                }
             }
-            CommitType::Feature => {
-                result.features.push(commit);
-            }
-            CommitType::Fix => {
-                result.fixes.push(commit);
-            }
-            _ => {
-                result.others.push(commit);
+        }
+    } else {
+        // Apply custom prefix configuration
+        for commit in commits {
+            match CommitType::try_from(commit.message.as_str())? {
+                CommitType::Breaking => {
+                    result.breaking.push(commit);
+                }
+                com => {
+                    if prefixes.is_patch(com.to_owned()) {
+                        result.fixes.push(commit);
+                    } else if prefixes.is_minor(com.to_owned()) {
+                        result.features.push(commit);
+                    } else if prefixes.is_major(com) {
+                        result.breaking.push(commit);
+                    } else {
+                        result.others.push(commit);
+                    }
+                }
             }
         }
     }
@@ -406,7 +453,14 @@ mod test_commit_type {
     #[test]
     fn test_other_commit_detection() {
         let commit = CommitType::try_from("unknow: unknown").unwrap();
-        assert_eq!(commit, CommitType::Other("unknow: unknown".to_string()));
+        assert_eq!(
+            commit,
+            CommitType::Other {
+                message: "unknow: unknown".to_string(),
+                prefix: "unknow".to_string(),
+                prefix_with_scope: "unknow".to_string(),
+            }
+        );
     }
 
     #[test]
@@ -414,7 +468,11 @@ mod test_commit_type {
         let commit = CommitType::try_from("unknow(scope): unknown").unwrap();
         assert_eq!(
             commit,
-            CommitType::Other("unknow(scope): unknown".to_string())
+            CommitType::Other {
+                message: "unknow(scope): unknown".to_string(),
+                prefix: "unknow".to_string(),
+                prefix_with_scope: "unknow(scope)".to_string(),
+            }
         );
     }
 
@@ -423,7 +481,11 @@ mod test_commit_type {
         let commit = CommitType::try_from("Small change to the codebase").unwrap();
         assert_eq!(
             commit,
-            CommitType::Other("Small change to the codebase".to_string())
+            CommitType::Other {
+                message: "Small change to the codebase".to_string(),
+                prefix: "Small change to the codebase".to_string(),
+                prefix_with_scope: "Small change to the codebase".to_string(),
+            }
         );
     }
 
@@ -461,7 +523,11 @@ mod test_commit_type {
         let revert_commit = CommitType::Revert;
         assert!(!revert_commit.is_breaking());
 
-        let other_commit = CommitType::Other("unknown".to_string());
+        let other_commit = CommitType::Other {
+            message: "unknown".to_string(),
+            prefix: "unknown".to_string(),
+            prefix_with_scope: "unknown".to_string(),
+        };
         assert!(!other_commit.is_breaking());
     }
 
@@ -499,7 +565,11 @@ mod test_commit_type {
         let revert_commit = CommitType::Revert;
         assert!(!revert_commit.is_minor());
 
-        let other_commit = CommitType::Other("unknown".to_string());
+        let other_commit = CommitType::Other {
+            message: "unknown".to_string(),
+            prefix: "unknown".to_string(),
+            prefix_with_scope: "unknown".to_string(),
+        };
         assert!(!other_commit.is_minor());
     }
 
@@ -537,7 +607,105 @@ mod test_commit_type {
         let revert_commit = CommitType::Revert;
         assert!(!revert_commit.is_patch());
 
-        let other_commit = CommitType::Other("unknown".to_string());
+        let other_commit = CommitType::Other {
+            message: "unknown".to_string(),
+            prefix: "unknown".to_string(),
+            prefix_with_scope: "unknown".to_string(),
+        };
         assert!(!other_commit.is_patch());
+    }
+}
+
+#[cfg(test)]
+mod test_analyze_custom_prefixes {
+    use super::*;
+
+    #[test]
+    fn test_analyze_custom_patch_prefixes() {
+        let commits = vec![
+            Commit {
+                id: "1".to_string(),
+                message: "fix: fix bug".to_string(),
+            },
+            Commit {
+                id: "1".to_string(),
+                message: "patch: fix bug".to_string(),
+            },
+        ];
+        let prefixes = Prefixes {
+            major: vec![],
+            minor: vec![],
+            patch: vec!["patch".to_string()],
+        };
+        let result = analyze(commits, &prefixes).unwrap();
+        assert_eq!(result.fixes.len(), 1);
+        assert_eq!(result.others.len(), 1);
+    }
+
+    #[test]
+    fn test_analyze_custom_minor_prefixes() {
+        let commits = vec![
+            Commit {
+                id: "1".to_string(),
+                message: "feat: add new feature".to_string(),
+            },
+            Commit {
+                id: "1".to_string(),
+                message: "customMinorPrefix: add new feature".to_string(),
+            },
+        ];
+        let prefixes = Prefixes {
+            major: vec![],
+            minor: vec!["customMinorPrefix".to_string()],
+            patch: vec![],
+        };
+        let result = analyze(commits, &prefixes).unwrap();
+        assert_eq!(result.features.len(), 1);
+        assert_eq!(result.others.len(), 1);
+    }
+
+    #[test]
+    fn test_analyze_custom_major_prefixes() {
+        let commits = vec![
+            Commit {
+                id: "1".to_string(),
+                message: "feat: add new feature".to_string(),
+            },
+            Commit {
+                id: "1".to_string(),
+                message: "BreakingFeat: add new feature".to_string(),
+            },
+        ];
+        let prefixes = Prefixes {
+            major: vec!["BreakingFeat".to_string()],
+            minor: vec![],
+            patch: vec![],
+        };
+        let result = analyze(commits, &prefixes).unwrap();
+        assert_eq!(result.breaking.len(), 1);
+        assert_eq!(result.others.len(), 1);
+    }
+
+    #[test]
+    fn test_analyze_with_default_rules_on_empty_prefixes() {
+        let commits = vec![
+            Commit {
+                id: "1".to_string(),
+                message: "feat: add new feature".to_string(),
+            },
+            Commit {
+                id: "1".to_string(),
+                message: "fix: fix bug".to_string(),
+            },
+        ];
+        let prefixes = Prefixes {
+            major: vec![],
+            minor: vec![],
+            patch: vec![],
+        };
+        let result = analyze(commits, &prefixes).unwrap();
+        assert_eq!(result.features.len(), 1);
+        assert_eq!(result.fixes.len(), 1);
+        assert_eq!(result.others.len(), 0);
     }
 }
