@@ -1,31 +1,26 @@
-use clap::Parser;
-
-mod args;
+mod configuration;
 mod conventional;
 mod output;
 mod repo;
 mod variant;
 
-use args::{Args, SemVerKindArg};
+use repo::Repo;
 
 fn main() -> miette::Result<()> {
-    let args = Args::parse();
-    let semver_kind = args.kind.unwrap_or(SemVerKindArg::Node);
-    let cli_output_format = args.out.unwrap_or(args::OutputFormat::Human);
+    let config = configuration::Config::new()?;
 
-    let repo = repo::open(args.path)?;
-
-    let (mut tag_version, tag_obj) = repo::latest_tag(&repo, semver_kind)?;
+    let repo = Repo::open(config.repo_path())?;
+    let (mut tag_version, tag_obj) = repo.latest_tag(config.semver_kind())?;
     let previous_version = tag_version.clone();
 
-    let commits = repo::commits_since_tag(&repo, &tag_obj);
-    let result = conventional::analyze(commits?)?;
+    let commits = repo.commits_since_tag(&tag_obj)?;
+    let result = conventional::analyze(commits, config.prefixes())?;
     let next_version = conventional::suggest_next_version(&mut tag_version, &result);
 
     println!(
         "{}",
         output::stringify(
-            cli_output_format,
+            config.output(),
             next_version,
             previous_version.to_string(),
             result
