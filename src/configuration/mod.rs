@@ -37,7 +37,7 @@ impl Config {
                         output: settings.output,
                         prefixes: settings.prefixes,
                         repo_path: args
-                            .path
+                            .repo
                             .map_or(Path::new(DEFAULT_REPO_PATH).to_path_buf(), |p| p),
                     })
                 } else {
@@ -56,7 +56,7 @@ impl Config {
                     major: args.major_scope.unwrap_or_else(Vec::new),
                 },
                 repo_path: args
-                    .path
+                    .repo
                     .map_or(Path::new(DEFAULT_REPO_PATH).to_path_buf(), |p| p),
             }),
         }

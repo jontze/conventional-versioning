@@ -6,9 +6,10 @@ use clap::Parser;
 pub(crate) struct Args {
     /// Path to the repository. Default is the current directory.
     #[arg(short = 'r', long, value_hint = clap::ValueHint::DirPath, env = "CONVENTIONAL_VERSIONING_REPO")]
-    pub path: Option<std::path::PathBuf>,
+    pub repo: Option<std::path::PathBuf>,
     /// Path to the configuration file. By default, the OS specific
     /// user configuration directories are checked.    
+    /// WARNING: If you use the `--config` option, all other args will be ignored, besides `--repo`.
     #[arg(short = 'c', long, value_hint = clap::ValueHint::FilePath, env = "CONVENTIONAL_VERSIONING_CONFIG")]
     pub config: Option<std::path::PathBuf>,
     /// SemVer kind. Default is the Node SemVer variant.
