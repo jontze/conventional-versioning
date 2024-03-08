@@ -8,7 +8,7 @@ edition = "2021"
 [dependencies]
 clap = { version = "4.5.2", features = ["derive", "env"] }
 git2 = { version = "0.18.2",  default-features = false}
-miette = { version = "7.1.0", features = ["fancy"] }
+miette = { version = "7.2.0", features = ["fancy"] }
 node-semver = "2.1.0"
 semver = "1.0.22"
 serde = { version = "1.0.197", features = ["derive"] }
