@@ -10,7 +10,7 @@ repository = "https://github.com/jontze/conventional-versioning"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-clap = { version = "4.5.3", features = ["derive", "env"] }
+clap = { version = "4.5.4", features = ["derive", "env"] }
 git2 = { version = "0.18.3",  default-features = false}
 miette = { version = "7.2.0", features = ["fancy"] }
 node-semver = "2.1.0"
