@@ -5,7 +5,8 @@ edition = "2021"
 description = "CLI tool that suggests the next version for you by analyzing the conventional commit history"
 license-file = "./LICENSE"
 repository = "https://github.com/jontze/conventional-versioning"
-
+# Avoid publishing to crates.io
+publish = ["jontze"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
