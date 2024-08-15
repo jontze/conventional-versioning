@@ -1,0 +1,362 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+## [0.2.27] - 2024-08-15
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump serde_json in the runtime-dependencies group
+
+### ⚙️ Miscellaneous Tasks
+
+- *(release)* Enable changelog gen after release
+- *(version)* Bump version to 0.2.27
+
+## [0.2.26] - 2024-08-13
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump serde in the runtime-dependencies group
+
+### ⚙️ Miscellaneous Tasks
+
+- *(version)* Bump version to 0.2.26
+
+## [0.2.25] - 2024-08-12
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump the runtime-dependencies group with 3 updates
+
+### ⚙️ Miscellaneous Tasks
+
+- *(version)* Bump version to 0.2.25
+
+## [0.2.24] - 2024-08-09
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump clap in the runtime-dependencies group
+
+### ⚙️ Miscellaneous Tasks
+
+- *(version)* Bump version to 0.2.24
+
+## [0.2.23] - 2024-08-08
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump serde in the runtime-dependencies group
+
+### ⚙️ Miscellaneous Tasks
+
+- *(version)* Bump version to 0.2.23
+
+## [0.2.22] - 2024-08-02
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump serde_json in the runtime-dependencies group
+
+### ⚙️ Miscellaneous Tasks
+
+- *(version)* Bump version to 0.2.22
+
+## [0.2.21] - 2024-08-01
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump the runtime-dependencies group across 1 directory with 2 updates
+
+### ⚙️ Miscellaneous Tasks
+
+- *(version)* Bump version to 0.2.21
+
+## [0.2.20] - 2024-07-29
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump serde_json in the runtime-dependencies group
+
+### ⚙️ Miscellaneous Tasks
+
+- *(version)* Bump version to 0.2.20
+
+## [0.2.19] - 2024-07-26
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump the runtime-dependencies group with 2 updates
+
+### ⚙️ Miscellaneous Tasks
+
+- *(version)* Bump version to 0.2.19
+
+## [0.2.18] - 2024-07-24
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump clap in the runtime-dependencies group
+
+### ⚙️ Miscellaneous Tasks
+
+- *(version)* Bump version to 0.2.18
+
+## [0.2.17] - 2024-07-22
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump mockall in the runtime-dependencies group
+
+### ⚙️ Miscellaneous Tasks
+
+- *(version)* Bump version to 0.2.17
+
+## [0.2.16] - 2024-07-18
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump toml in the runtime-dependencies group
+
+### ⚙️ Miscellaneous Tasks
+
+- *(version)* Bump version to 0.2.16
+
+## [0.2.15] - 2024-07-09
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump clap in the runtime-dependencies group
+
+### ⚙️ Miscellaneous Tasks
+
+- *(version)* Bump version to 0.2.15
+
+## [0.2.14] - 2024-07-08
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump serde in the runtime-dependencies group
+
+### ⚙️ Miscellaneous Tasks
+
+- *(version)* Bump version to 0.2.14
+
+## [0.2.13] - 2024-07-02
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump serde_json in the runtime-dependencies group
+
+### ⚙️ Miscellaneous Tasks
+
+- *(version)* Bump version to 0.2.13
+
+## [0.2.12] - 2024-07-01
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump the runtime-dependencies group with 2 updates
+
+### ⚙️ Miscellaneous Tasks
+
+- *(version)* Bump version to 0.2.12
+
+## [0.2.11] - 2024-06-25
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump serde_json in the runtime-dependencies group
+
+### ⚙️ Miscellaneous Tasks
+
+- *(version)* Bump version to 0.2.11
+
+## [0.2.10] - 2024-06-14
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump git2 in the runtime-dependencies group
+
+### ⚙️ Miscellaneous Tasks
+
+- *(release)* Move other changes with wildcard to last entry
+- *(version)* Bump version to 0.2.10
+
+## [0.2.9] - 2024-06-11
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump clap in the runtime-dependencies group
+
+### ⚙️ Miscellaneous Tasks
+
+- *(version)* Bump version to 0.2.9
+
+## [0.2.8] - 2024-06-07
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump clap in the runtime-dependencies group
+
+### ⚙️ Miscellaneous Tasks
+
+- *(version)* Bump version to 0.2.8
+
+## [0.2.7] - 2024-06-04
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump toml in the runtime-dependencies group
+
+### ⚙️ Miscellaneous Tasks
+
+- *(version)* Bump version to 0.2.7
+
+## [0.2.6] - 2024-05-27
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump serde in the runtime-dependencies group
+
+### ⚙️ Miscellaneous Tasks
+
+- *(version)* Bump version to 0.2.6
+
+## [0.2.5] - 2024-05-16
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump the runtime-dependencies group with 2 updates
+
+### ⚙️ Miscellaneous Tasks
+
+- *(cargo)* Set privat registry name to avoid publish to crates.io
+- *(release)* Publish to private registry
+- *(version)* Bump version to 0.2.5
+
+## [0.2.4] - 2024-05-08
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump the runtime-dependencies group with 2 updates
+
+### ⚙️ Miscellaneous Tasks
+
+- *(version)* Bump version to 0.2.4
+
+## [0.2.3] - 2024-05-07
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump semver in the runtime-dependencies group
+
+### ⚙️ Miscellaneous Tasks
+
+- *(version)* Bump version to 0.2.3
+
+## [0.2.2] - 2024-05-02
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump serde in the runtime-dependencies group
+
+### ⚙️ Miscellaneous Tasks
+
+- *(version)* Bump version to 0.2.2
+
+## [0.2.1] - 2024-04-29
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump serde in the runtime-dependencies group
+
+### ⚙️ Miscellaneous Tasks
+
+- *(cargo)* Add some required content to the manifest
+- *(dependabot)* Configure dependabot to group prod updates
+- *(version)* Bump version to 0.2.1
+
+## [0.2.0] - 2024-03-03
+
+### 🚀 Features
+
+- *(config)* Parse yaml config file
+- *(args)* Add warning about `--config` flag usage
+- *(versioning)* Use custom config on version detection
+
+### ⚙️ Miscellaneous Tasks
+
+- *(README)* Add `--help` command output to readme
+- *(README)* Extend project page with new config option
+- *(release)* Add config for automated version bump
+- *(version)* Bump version to 0.2.0
+
+## [0.1.1] - 2024-02-05
+
+### 📚 Documentation
+
+- *(README)* Fix a typo
+
+### ⚙️ Miscellaneous Tasks
+
+- *(github)* Auto commit and tag next version on main push
+- *(release)* Wait for test before release
+- *(release)* Grant write access to workflow
+- *(release)* Use deploy key for tagging to trigger release workflow
+- *(version)* Bump version to `v0.1.1`
+
+## [0.1.0] - 2023-07-17
+
+### 🚀 Features
+
+- Extract commits since latest tag
+- Extract commits since latest tag
+- Suggest next version number based on conventinal commits
+- Support cargo and node semver style
+- *(conventional)* Handle version bump of stable and unstable versions
+- *(output)* Support json, yaml, human and plain output format
+- *(output)* Add support for toml output
+- *(output)* Summarize used commits
+
+### 🐛 Bug Fixes
+
+- *(tag)* Prevent cargo version from panic if prefixed with 'v'
+- *(commits)* Peel tag to commit object to get the correct hash id
+- *(args)* Rename semVer variant args to prevent clash with verbosity
+
+### 🚜 Refactor
+
+- *(variant)* Move impl to own trait
+- *(Cargo)* Remove openssl system dependency
+- Wrap git2 commit in new type
+- Move out args to args module
+- *(error)* Replace anyhow with miette for prettier errors
+
+### 📚 Documentation
+
+- *(README)* Add README to the project with introduction
+- *(README)* Fix a typo
+
+### ⚙️ Miscellaneous Tasks
+
+- Cargo project setup
+- *(cargo)* Update lockfile dependencies
+- *(test)* Run test workflow on main push and PRs
+- *(main)* Fix typo in main workflow
+- *(main)* Fix incorrect path to shared workflow
+- *(main)* Fix typo in shared workflow parametet
+- *(release)* Build executable for target platforms in matrix
+- *(release)* Add missing system dependencyto build on arm64
+- *(release)* Remove arm64 support
+- Ignore lcov coverage report
+- *(release)* Fix missing tag name on windows runner
+- *(release)* Fix archives containing nested directories
+- *(release)* Remove unneeded transform of tars
+- *(release)* Explicitly use bash shell for tag step
+- *(github)* Enable dependabot updates
+- *(ci)* Configure prettier github release note generation
+- *(release)* Publish github release on tag push
+
+<!-- generated by git-cliff -->
