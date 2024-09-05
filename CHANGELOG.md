@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.30] - 2024-09-05
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump the runtime-dependencies group with 2 updates
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog [skip ci]
+- *(version)* Bump version to 0.2.30
+
 ## [0.2.29] - 2024-08-26
 
 ### 🐛 Bug Fixes
