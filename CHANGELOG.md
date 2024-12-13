@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.47] - 2024-12-13
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump semver in the runtime-dependencies group
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog [skip ci]
+- *(version)* Bump version to 0.2.47
+
 ## [0.2.46] - 2024-12-11
 
 ### 🐛 Bug Fixes
