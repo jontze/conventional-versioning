@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.57] - 2025-02-03
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump miette in the runtime-dependencies group
+
+### ⚙️ Miscellaneous Tasks
+
+- *(version)* Bump version to 0.2.57
+
+## [0.2.56] - 2025-01-29
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump serde_json in the runtime-dependencies group
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog [skip ci]
+- *(version)* Bump version to 0.2.56
+
 ## [0.2.55] - 2025-01-21
 
 ### 🐛 Bug Fixes
