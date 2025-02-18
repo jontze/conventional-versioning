@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.61] - 2025-02-18
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump clap in the runtime-dependencies group
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog [skip ci]
+- *(version)* Bump version to 0.2.61
+
 ## [0.2.60] - 2025-02-12
 
 ### 🐛 Bug Fixes
