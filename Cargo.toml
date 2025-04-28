@@ -1,6 +1,6 @@
 [package]
 name = "conventional-versioning"
-version = "0.2.70"
+version = "0.2.71"
 edition = "2021"
 description = "CLI tool that suggests the next version for you by analyzing the conventional commit history"
 license-file = "./LICENSE"
