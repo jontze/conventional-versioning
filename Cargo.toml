@@ -12,7 +12,7 @@ publish = ["jontze"]
 
 [dependencies]
 clap = { version = "4.5.37", features = ["derive", "env"] }
-git2 = { version = "0.20.1",  default-features = false}
+git2 = { version = "0.20.2",  default-features = false}
 miette = { version = "7.6.0", features = ["fancy"] }
 node-semver = "2.2.0"
 semver = "1.0.26"
