@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.87] - 2025-10-10
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump the runtime-dependencies group across 1 directory with 2 updates
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog [skip ci]
+- *(version)* Bump version to 0.2.87
+
 ## [0.2.86] - 2025-09-25
 
 ### 🐛 Bug Fixes
