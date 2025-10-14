@@ -11,7 +11,7 @@ publish = ["jontze"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-clap = { version = "4.5.48", features = ["derive", "env"] }
+clap = { version = "4.5.49", features = ["derive", "env"] }
 git2 = { version = "0.20.2",  default-features = false}
 miette = { version = "7.6.0", features = ["fancy"] }
 node-semver = "2.2.0"
