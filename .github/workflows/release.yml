@@ -74,7 +74,7 @@ jobs:
           strip conventional-versioning.exe
           7z a ../../../conventional-versioning-${{ steps.tag.outputs.name }}-${{ matrix.target }}.zip conventional-versioning.exe
       - name: Upload Archive as Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           if-no-files-found: error
           name: conventional-versioning-${{ steps.tag.outputs.name }}-${{ matrix.target }}
