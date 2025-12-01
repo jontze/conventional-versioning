@@ -22,4 +22,4 @@ serde_yaml = "0.9.34"
 toml = "0.9.8"
 
 [dev-dependencies]
-mockall = "0.13.1"
+mockall = "0.14.0"
