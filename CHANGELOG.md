@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.92] - 2025-12-03
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump mockall from 0.13.1 to 0.14.0
+- *(deps)* Bump clap in the runtime-dependencies group
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog [skip ci]
+- *(version)* Bump version to 0.2.92
+
 ## [0.2.91] - 2025-11-29
 
 ### 🐛 Bug Fixes
