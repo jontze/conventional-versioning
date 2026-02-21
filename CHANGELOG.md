@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.96] - 2026-02-21
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump clap
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog [skip ci]
+- *(version)* Bump version to 0.2.96
+
 ## [0.2.95] - 2026-02-05
 
 ### 🐛 Bug Fixes
