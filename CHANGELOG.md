@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.98] - 2026-03-03
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump toml from 0.9.11+spec-1.1.0 to 1.0.3+spec-1.1.0
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog [skip ci]
+- *(version)* Bump version to 0.2.98
+
 ## [0.2.97] - 2026-03-03
 
 ### 🐛 Bug Fixes
