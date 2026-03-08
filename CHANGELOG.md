@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.99] - 2026-03-08
+
+### 🐛 Bug Fixes
+
+- *(deps)* Bump toml in the runtime-dependencies group
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog [skip ci]
+- *(version)* Bump version to 0.2.99
+
 ## [0.2.98] - 2026-03-03
 
 ### 🐛 Bug Fixes
